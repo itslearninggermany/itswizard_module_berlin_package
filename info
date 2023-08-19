@@ -1,0 +1,46 @@
+Feinkonzept und Dokumentation
+
+
+==> Bedeutung des Attributs „BenutzerAktionCode“  <==
+
+Wird der API-Endpunkt ohne den Query-Parameter „dtLetzteAenderung“ aufgerufen, werden alle
+zum aktuellen Zeitpunkt für den entsprechenden Dienst freigegebenen Benutzer mit dem Akti-
+onscode „C“ geliefert. Mit dieser Variante kann z.B. beim API-Konsumenten ein gültiger Datenbe-
+stand komplett neu aufgebaut werden.
+Wird der API-Endpunkt mit dem Query-Parameter „dtLetzteAenderung“ aufgerufen, werden Be-
+nutzer wie folgt geliefert:
+    Benutzer, die im angefragten Zeitraum explizit (z.B. durch Neuerfassung in der BLUSD
+    oder im Berliner Schulportal) oder implizit (durch eine Freigabe für den Dienst) aus Sicht
+    des Dienstes neu entstanden sind, werden mit Aktionscode „C“ geliefert.
+
+    Benutzer, die im angefragten Zeitraum explizit (z.B. durch Löschung in der BLUSD oder im
+    Berliner Schulportal) oder implizit (durch den Entzug einer Freigabe für den Dienst) aus
+    Sicht des Dienstes gelöscht wurden, werden mit Aktionscode „D“ geliefert.
+
+    Benutzer, die im angefragten Zeitraum aus Sicht des Dienstes nicht neu entstanden und
+    nicht gelöscht wurden, deren Datum der letzten Änderung aber innerhalb des angefrag-
+    ten Zeitraums liegt, werden mit Aktionscode „U“ geliefert.
+
+    Alle anderen Benutzer (weder neu, noch gelöscht, noch geändert) werden nicht geliefert.
+
+    Wird ein Benutzer innerhalb des Anfragezeitraumes erstellt oder zugeordnet und wieder
+    entfernt, so wird kein Datensatz geliefert.
+
+Als Aktionsdatum „benutzerDtAktion“ wird immer der letzte Zeitpunkt der impliziten oder explizi-
+ten Einfügung oder Löschung bzw. Änderung geliefert.
+
+
+==> Eltern <==
+
+Für Benutzer, die einen Eltern-Account repräsentieren, werden zusätzlich alle Schülerinnen / Schüler
+geliefert, die dem Benutzer zugeordnet sind. Dabei gilt:
+
+Ein Eltern-Account wird einem Dienst nur bereitgestellt, wenn mindestens eine Schülerin / ein Schüler
+für den abrufenden Dienst freigegeben wurde, die dem Eltern-Account zugeordnet wurde.
+
+In der Liste der einem Eltern-Account zugeordneten Schülerinnen / Schüler erscheinen nur Schülerin-
+nen / Schüler, die für den abrufenden Dienst freigegeben wurden.
+
+bezugspersonPersonUID   Universal Unique Identifier des Kindes
+bezugspersonTyp         String („Kind“)
+
